@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 app.get('/api/beers', (req, res) => {
 	Beer.find((err, beers) => {
 		if(err){
-			throw err;
+			throw err; //if error prints err stack
 		}
 		res.json(beers);
 	});
@@ -34,7 +34,7 @@ app.get('/api/beers', (req, res) => {
 
  //Get one specific beer by id
  //UNCOMMENT FUNCTION BELOW ONCE YOU SOLVED GETTING ALL BEERS
-app.get('/api/beers/:_id', (req, res) => {
+app.get('/api/beers/:_id', (req, res) => {  // : reps the parameter to pull
 Beer.findById(req.params._id, (err, beer) => {
 if(err){
  			throw err;
@@ -57,27 +57,29 @@ if(err){
 
 // Update one specific beer
 // UNCOMMENT FUNCTION BELOW ONCE YOU SOLVED GETTING ADDING ONE BEER
-// app.put('/api/beers/:_id', (req, res) => {
-// 	var query = {_id: req.params._id};
-// 	Beer.findOneAndUpdate(query, updatedBeer, {}, (err, beer) => {
-// 		if(err){
-// 			throw err;
-// 		}
-// 		res.json(beer);
-// 	});
-// });
+ app.put('/api/beers/:_id', (req, res) => {
+   var query = {_id: req.params._id}; // get _id parameter from request
+   var updatedBeer = req.body; // get updated info from the request body, must define anything new 
+ 	Beer.findOneAndUpdate(query, updatedBeer, {}, (err, beer) => {
+ 		if(err){
+ 			throw err;
+ 		}
+ 		res.json(beer);
+ 	});
+ });
 
 // Delete one beer from list
 // UNCOMMENT FUNCTION BELOW ONCE YOU SOLVED UPADTING ONE BEER
-// app.delete('/api/beers/:_id', (req, res) => {
-// 	var query = {_id: id};
-// 	Beer.remove(query, (err, beer) => {
-// 		if(err){
-// 			throw err;
-// 		}
-// 		res.json(beer);
-// 	});
-// });
+ app.delete('/api/beers/:_id', (req, res) => {
+  //var id = req.body;
+ 	var query = {_id: req.params._id};
+ 	Beer.findByIdAndRemove(query, (err, beer) => {
+ 		if(err){
+ 			throw err;
+ 		}
+ 		res.json(beer);
+ 	});
+ });
 
 app.listen(app.get('port'), function() {
   console.log('Web Server started on port ' + app.get('port'));
